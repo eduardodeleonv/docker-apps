@@ -4,14 +4,14 @@ services:
     container_name: homebox
     restart: unless-stopped
 #    ports:
-#     - "3100:7745"
+#     - "${HOST_PORT}:${HBOX_WEB_PORT}"
     volumes:
       - ./data:/data
     env_file:
       - .env
     environment:
       - HBOX_MODE=production
-      - HBOX_WEB_PORT=7745
+      - HBOX_WEB_PORT=${HBOX_WEB_PORT}
       - HBOX_DATABASE_NAME=${HBOX_DATABASE_DATABASE}
       - HBOX_DATABASE_USER=${HBOX_DATABASE_USERNAME}
       - HBOX_DATABASE_SSL_MODE=${HBOX_DATABASE_SSL_MODE}
