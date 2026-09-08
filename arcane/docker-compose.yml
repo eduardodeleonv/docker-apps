@@ -3,7 +3,7 @@ services:
     image: ghcr.io/getarcaneapp/manager:latest
     container_name: arcane
 #    ports:
-#      - '3552:3552'
+#      - "${HOST_PORT}:${CONTAINER_PORT}"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./data:/app/data
