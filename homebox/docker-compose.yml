@@ -1,0 +1,51 @@
+services:
+  homebox:
+    image: ghcr.io/sysadminsmedia/homebox:latest
+    container_name: homebox
+    restart: unless-stopped
+#    ports:
+#     - "3100:7745"
+    volumes:
+      - ./data:/data
+    env_file:
+      - .env
+    environment:
+      - HBOX_MODE=production
+      - HBOX_WEB_PORT=7745
+      - HBOX_DATABASE_NAME=${HBOX_DATABASE_DATABASE}
+      - HBOX_DATABASE_USER=${HBOX_DATABASE_USERNAME}
+      - HBOX_DATABASE_SSL_MODE=${HBOX_DATABASE_SSL_MODE}
+    networks:
+      - proxy_network
+      - internal_net
+    depends_on:
+      homebox-db:
+        condition: service_healthy
+
+  homebox-db:
+    image: postgres:17-alpine
+    container_name: homebox-db
+    restart: unless-stopped
+    environment:
+      - TZ=${TZ}
+      - POSTGRES_USER=${HBOX_DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${HBOX_DATABASE_PASSWORD}
+      - POSTGRES_DB=${HBOX_DATABASE_DATABASE}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - internal_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${HBOX_DATABASE_USERNAME} -d ${HBOX_DATABASE_DATABASE}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres:
+
+networks:
+  proxy_network:
+    external: true
+  internal_net:
+    driver: bridge

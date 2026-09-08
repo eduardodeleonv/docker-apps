@@ -1,0 +1,20 @@
+services:
+  dbackup:
+    image: skyfay/dbackup:latest
+    restart: always
+    environment:
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL}
+      - DISABLE_HTTPS=${DISABLE_HTTPS}
+      - TZ=${TZ}
+    volumes:
+      - ./data:/data               # All persistent data (db, storage, certs)
+      - ./backups:/backups         # Optional: used for local backups
+      # - ./tmp:/tmp               # Recommended: staging space for running backups
+    networks:
+      - proxy_network
+
+networks:
+  proxy_network:
+    external: true

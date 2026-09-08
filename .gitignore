@@ -1,0 +1,10 @@
+# Ignore all .env files in any folder
+**/.env
+**/*.env
+
+# Ignore persistent data and config folders
+**/data/
+**/media/
+**/export/
+**/consume/
+**/config/
