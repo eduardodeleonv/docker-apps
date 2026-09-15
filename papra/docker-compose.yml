@@ -1,0 +1,18 @@
+services:
+  papra:
+    image: papra/papra:latest
+    container_name: papra
+    restart: unless-stopped
+    user: "1000:1000"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - ./ingestion:/app/ingestion
+    networks:
+      - proxy_network
+    security_opt:
+      - no-new-privileges:true
+networks:
+  proxy_network:
+    external: true
